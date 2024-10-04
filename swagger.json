@@ -1,0 +1,160 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Video-games API",
+    "description": "API to retrieve basic information about video-games",
+    "version": "1.0.0"
+  },
+  "host": "cse341-proj2-4075.onrender.com",
+  "basePath": "/",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/games/": {
+      "get": {
+        "description": "Get all the stored games",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. Request completed"
+          }
+        }
+      },
+      "post": {
+        "description": "Create and store a new game",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "gameName": {
+                  "example": "The Witcher 3"
+                },
+                "releaseDate": {
+                  "example": "2015-05-19"
+                },
+                "developer": {
+                  "example": "CD Projekt Red"
+                },
+                "publisher": {
+                  "example": "CD Projekt"
+                },
+                "platforms": {
+                  "example": ["PC", "PlayStation 4", "Xbox One", "Nintendo Switch"]
+                },
+                "genre": {
+                  "example": "Action RPG"
+                },
+                "rating": {
+                  "example": 9.8
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK. Request completed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/games/{id}": {
+      "get": {
+        "description": "Get an existing game with an ID",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK. Request completed"
+          }
+        }
+      },
+      "put": {
+        "description": "Update an existing game with an ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "gameName": {
+                  "example": "The Witcher 3"
+                },
+                "releaseDate": {
+                  "example": "2015-05-19"
+                },
+                "developer": {
+                  "example": "CD Projekt Red"
+                },
+                "publisher": {
+                  "example": "CD Projekt"
+                },
+                "platforms": {
+                  "example": ["PC", "PlayStation 4", "Xbox One", "Nintendo Switch"]
+                },
+                "genre": {
+                  "example": "Action RPG"
+                },
+                "rating": {
+                  "example": 9.8
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK. Request completed."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete an existing game with an ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK. Request completed"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}
