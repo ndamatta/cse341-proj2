@@ -1,0 +1,36 @@
+### Get all games
+GET http://localhost:3001/games
+
+### Get game by id
+GET http://localhost:3001/games/66ff424f8191294631ac17c8
+
+### Create game
+POST http://localhost:3001/games
+content-type: application/json
+
+{
+  "gameName": "The Witcher 3: Wild Hunt",
+  "releaseDate": "2015-05-19",
+  "developer": "CD Projekt Red",
+  "publisher": "CD Projekt",
+  "platforms": ["PC", "PlayStation 4", "Xbox One", "Nintendo Switch"],
+  "genre": "Action RPG",
+  "rating": 9.8
+}
+
+### Update game
+PUT http://localhost:3001/games/67003c1462314ea1c5c8e1b9 HTTP/1.1
+content-type: application/json
+
+{
+  "gameName": "The Witcher 3",
+  "releaseDate": "2015-05-19",
+  "developer": "CD Projekt Red",
+  "publisher": "CD Projekt",
+  "platforms": ["PC", "PlayStation 4", "Xbox One", "Nintendo Switch"],
+  "genre": "Action RPG",
+  "rating": 9.8
+}
+
+### Delete game
+DELETE http://localhost:3001/games/67003c0562314ea1c5c8e1b8 HTTP/1.1
