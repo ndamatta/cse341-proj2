@@ -2,7 +2,7 @@
 GET http://localhost:3001/games
 
 ### Get game by id
-GET http://localhost:3001/games/66ff424f8191294631ac17c8
+GET http://localhost:3001/games/6701344e8c08ddd80413f2c4
 
 ### Create game
 POST http://localhost:3001/games
@@ -19,11 +19,11 @@ content-type: application/json
 }
 
 ### Update game
-PUT http://localhost:3001/games/67003c1462314ea1c5c8e1b9 HTTP/1.1
+PUT http://localhost:3001/games/67013ad40613caa4ab8e97ff HTTP/1.1
 content-type: application/json
 
 {
-  "gameName": "The Witcher 3",
+  "gameName": "ASD",
   "releaseDate": "2015-05-19",
   "developer": "CD Projekt Red",
   "publisher": "CD Projekt",
@@ -33,4 +33,4 @@ content-type: application/json
 }
 
 ### Delete game
-DELETE http://localhost:3001/games/67003c0562314ea1c5c8e1b8 HTTP/1.1
+DELETE http://localhost:3001/games/67013f094866695e24566181 HTTP/1.1
