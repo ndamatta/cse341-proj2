@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Video-games API",
-    "description": "API to retrieve basic information about video-games",
+    "description": "API to retrieve, manage, and update basic information about video-games and their developers.",
     "version": "1.0.0"
   },
   "host": "cse341-proj2-4075.onrender.com",
@@ -11,47 +11,88 @@
     "https"
   ],
   "paths": {
+    "/login": {
+      "get": {
+        "description": "Log in to the system. This endpoint initiates the login process and returns an authentication token if successful.",
+        "responses": {
+          "default": {
+            "description": "Default response, depends on the server's response to the login attempt."
+          }
+        }
+      }
+    },
+    "/logout": {
+      "get": {
+        "description": "Log out of the system. This will terminate the user session and invalidate the authentication token.",
+        "responses": {
+          "default": {
+            "description": "Default response, depends on the server's response to the logout attempt."
+          }
+        }
+      }
+    },
+    "/api-docs": {
+      "get": {
+        "description": "Fetch the API documentation in JSON format, describing all available routes, methods, and their respective parameters.",
+        "responses": {
+          "default": {
+            "description": "The API documentation in Swagger format."
+          }
+        }
+      }
+    },
     "/games/": {
       "get": {
-        "description": "Get all the stored games",
+        "description": "Retrieve a list of all available video games. This returns basic information about each game, including name, release date, developer, and more.",
         "produces": [
           "application/json"
         ],
         "responses": {
           "200": {
-            "description": "OK. Request completed"
+            "description": "A list of video games retrieved successfully."
+          },
+          "500": {
+            "description": "Internal Server Error if the database fails to respond."
           }
         }
       },
       "post": {
-        "description": "Create and store a new game",
+        "description": "Add a new video game to the collection. The request body should contain details such as game name, release date, developer, publisher, platforms, genre, and rating.",
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "description": "JSON object containing the details of the new video game.",
             "schema": {
               "type": "object",
               "properties": {
                 "gameName": {
-                  "example": "The Witcher 3"
+                  "example": "Super Mario Bros",
+                  "description": "The name of the video game."
                 },
                 "releaseDate": {
-                  "example": "2015-05-19"
+                  "example": "1985-09-13",
+                  "description": "The release date of the video game."
                 },
                 "developer": {
-                  "example": "CD Projekt Red"
+                  "example": "Nintendo",
+                  "description": "The developer of the video game."
                 },
                 "publisher": {
-                  "example": "CD Projekt"
+                  "example": "Nintendo",
+                  "description": "The publisher of the video game."
                 },
                 "platforms": {
-                  "example": ["PC", "PlayStation 4", "Xbox One", "Nintendo Switch"]
+                  "example": ["NES", "Switch"],
+                  "description": "List of platforms the game is available on."
                 },
                 "genre": {
-                  "example": "Action RPG"
+                  "example": "Platformer",
+                  "description": "The genre of the video game."
                 },
                 "rating": {
-                  "example": 9.8
+                  "example": "E",
+                  "description": "The ESRB rating of the video game."
                 }
               }
             }
@@ -59,17 +100,23 @@
         ],
         "responses": {
           "201": {
-            "description": "OK. Request completed"
+            "description": "Game created successfully."
+          },
+          "401": {
+            "description": "Unauthorized access."
+          },
+          "422": {
+            "description": "Unprocessable Entity. Validation errors or missing fields in the request body."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error if the database fails to process the request."
           }
         }
       }
     },
     "/games/{id}": {
       "get": {
-        "description": "Get an existing game with an ID",
+        "description": "Retrieve a specific video game by its unique ID. Returns details about the game including its name, release date, developer, publisher, platforms, genre, and rating.",
         "produces": [
           "application/json"
         ],
@@ -78,50 +125,59 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The unique identifier of the video game."
           }
         ],
         "responses": {
           "200": {
-            "description": "OK. Request completed"
+            "description": "Game data retrieved successfully."
+          },
+          "400": {
+            "description": "Bad request. Invalid game ID."
+          },
+          "404": {
+            "description": "Game not found."
           }
         }
       },
       "put": {
-        "description": "Update an existing game with an ID",
+        "description": "Update the information of an existing video game by its ID. The request body should contain the updated details of the game.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The unique identifier of the video game."
           },
           {
             "name": "body",
             "in": "body",
+            "description": "JSON object containing the updated details of the video game.",
             "schema": {
               "type": "object",
               "properties": {
                 "gameName": {
-                  "example": "The Witcher 3"
+                  "example": "Super Mario Bros"
                 },
                 "releaseDate": {
-                  "example": "2015-05-19"
+                  "example": "1985-09-13"
                 },
                 "developer": {
-                  "example": "CD Projekt Red"
+                  "example": "Nintendo"
                 },
                 "publisher": {
-                  "example": "CD Projekt"
+                  "example": "Nintendo"
                 },
                 "platforms": {
-                  "example": ["PC", "PlayStation 4", "Xbox One", "Nintendo Switch"]
+                  "example": ["NES", "Switch"]
                 },
                 "genre": {
-                  "example": "Action RPG"
+                  "example": "Platformer"
                 },
                 "rating": {
-                  "example": 9.8
+                  "example": "E"
                 }
               }
             }
@@ -129,29 +185,216 @@
         ],
         "responses": {
           "204": {
-            "description": "OK. Request completed."
+            "description": "Game updated successfully."
+          },
+          "400": {
+            "description": "Bad request. Invalid game ID or invalid data."
+          },
+          "401": {
+            "description": "Unauthorized access."
+          },
+          "404": {
+            "description": "Game not found."
+          },
+          "422": {
+            "description": "Unprocessable Entity. Validation errors in the request body."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error."
           }
         }
       },
       "delete": {
-        "description": "Delete an existing game with an ID",
+        "description": "Delete a specific video game by its unique ID from the collection.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The unique identifier of the video game to delete."
           }
         ],
         "responses": {
           "204": {
-            "description": "OK. Request completed"
+            "description": "Game deleted successfully."
+          },
+          "400": {
+            "description": "Bad request. Invalid game ID."
+          },
+          "401": {
+            "description": "Unauthorized access."
+          },
+          "404": {
+            "description": "Game not found."
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/developers/": {
+      "get": {
+        "description": "Retrieve a list of all developers. This returns basic information about each developer, including name, founding date, and headquarters location.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of developers retrieved successfully."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      },
+      "post": {
+        "description": "Add a new developer to the collection. The request body should contain details such as the developer name, founding date, and headquarters location.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "JSON object containing the details of the new developer.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "developerName": {
+                  "example": "Nintendo",
+                  "description": "The name of the developer."
+                },
+                "founded": {
+                  "example": "1889-09-23",
+                  "description": "The founding date of the developer."
+                },
+                "headquarters": {
+                  "example": "Kyoto, Japan",
+                  "description": "The location of the developer's headquarters."
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Developer created successfully."
+          },
+          "401": {
+            "description": "Unauthorized access."
+          },
+          "422": {
+            "description": "Unprocessable Entity. Validation errors in the request body."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
+    "/developers/{id}": {
+      "get": {
+        "description": "Retrieve a specific developer by its unique ID. Returns details about the developer including its name, founded date, and headquarters.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The unique identifier of the developer."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Developer data retrieved successfully."
+          },
+          "400": {
+            "description": "Bad request. Invalid developer ID."
+          },
+          "404": {
+            "description": "Developer not found."
+          }
+        }
+      },
+      "put": {
+        "description": "Update the information of an existing developer by its ID. The request body should contain the updated details of the developer.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The unique identifier of the developer."
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "JSON object containing the updated details of the developer.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "developerName": {
+                  "example": "Nintendo"
+                },
+                "founded": {
+                  "example": "1889-09-23"
+                },
+                "headquarters": {
+                  "example": "Kyoto, Japan"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Developer updated successfully."
+          },
+          "400": {
+            "description": "Bad request. Invalid developer ID or invalid data."
+          },
+          "401": {
+            "description": "Unauthorized access."
+          },
+          "404": {
+            "description": "Developer not found."
+          },
+          "422": {
+            "description": "Unprocessable Entity. Validation errors in the request body."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a specific developer by its unique ID from the collection.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The unique identifier of the developer to delete."
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Developer deleted successfully."
+          },
+          "400": {
+            "description": "Bad request. Invalid developer ID."
+          },
+          "401": {
+            "description": "Unauthorized access."
+          },
+          "404": {
+            "description": "Developer not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
           }
         }
       }
