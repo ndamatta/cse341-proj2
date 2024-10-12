@@ -4,6 +4,7 @@ const mongodb = require('./db/connect');
 const passport = require('passport');
 const GithubStrategy = require('passport-github2').Strategy;
 const cors = require('cors'); 
+const session = require('express-session');
 const indexRoute = require('./routes');
 
 
