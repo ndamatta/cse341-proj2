@@ -1,7 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('./db/connect');
-const indexRoute = require('./routes')
+const passport = require('passport');
+const indexRoute = require('./routes');
+
 
 const port = process.env.PORT || 3001;
 const app = express();
