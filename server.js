@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongodb = require('./db/connect');
 const passport = require('passport');
 const indexRoute = require('./routes');
+const GithubStrategy = require('passport-github2').Strategy;
 
 
 const port = process.env.PORT || 3001;
