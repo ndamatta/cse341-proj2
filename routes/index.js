@@ -1,10 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const gamesRoute = require('./games')
-const swaggerRoute = require('./swagger')
+const swaggerRoute = require('./swagger');
+const passport = require('passport');
 
-router.get('/', (req, res) => {res.send('Index page working, try with /api-docs')})
 router.use('/', swaggerRoute);
 router.use('/games', gamesRoute);
 
+router.get('/login', passport.authenticate('github'), (req, res) => {});
+router.get('/logout', function(req, res, next) {
+    req.logout(function(err) {
+        if (err) {return next(err);}
+        res.redirect('/');
+    })
+})
 module.exports =  router;
